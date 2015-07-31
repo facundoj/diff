@@ -16,6 +16,7 @@ originalFileLines = fs.readFileSync(filesPaths.original).toString('utf8').split(
 
 filesPaths.modified.forEach(compareFile(originalFileLines));
 
+// determines diff for each compared file with original
 function compareFile(originalFileLines) {
     return function compare(modifiedPath) {
         var i = 0, j,
@@ -67,6 +68,7 @@ function compareFile(originalFileLines) {
     }
 }
 
+// determines which lines have been modified, deleted or added
 function resolvePrevLines(possiblyAdded, possiblyRemoved, result) {
     var i, j;
     for (i = 0; i < possiblyRemoved.length; i++) {
@@ -91,13 +93,15 @@ function resolvePrevLines(possiblyAdded, possiblyRemoved, result) {
     })
 }
 
+// outputs diff results
 function printResult(results, file) {
     console.log('Result: ' + file + ' -------------------------\n');
-    results.forEach(function(result) {
-        console.log(result.sign + ' ' + result.content);
+    results.forEach(function(result, i) {
+        console.log(i + ': ' + result.sign + ' ' + result.content);
     });
 }
 
+// raises an error if file is not found
 function assertFileExists(filePath) {
     if (!filePath || !fs.existsSync(filePath)) {
         throw 'File not found: ' + filePath;
